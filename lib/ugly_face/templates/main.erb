@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <link href='stylesheets/style.css' type='text/css' rel='stylesheet' />
+    <meta charset="utf-8">
+    <title>Run Results</title>
+  </head>
+
+  <body>
+    <div style="float: left; clear:both;">
+      <div class="header_logo">
+        <img src='images/<%= logo %>' width="155px" />
+      </div>
+      <div class="header_description">
+        <% if report.custom_suite_header? %>
+          <%= render "suite_header" %>
+        <% else %>
+          <%= render "main_header" %>
+        <% end %>
+		<br>
+        <table class="run_stats">
+		  <tr>
+		    <th>Environment: </th>
+			<td><%= ENV['TARGET']  %></td>
+            <th>Started: </th>
+			<td><%= report.start_time  %></td>  
+          </tr>
+		  <tr>
+            <th>Location: </th>
+			<td><%= ENV['NODE']  %></td>  
+			<th>Duration: </th>        
+            <td><%= report.total_duration  %></td>			
+          </tr>
+		  <tr>
+            <th>Browser: </th>
+			<td><%= ENV['CLIENT']  %></td> 
+ 			<th>Debug?: </th>
+			<td><%= ENV['DEBUG']  %></td>
+          </tr>
+		  <tr>
+		    <th>Scope: </th>
+			<td><%= ENV['SCOPE']  %></td>
+            <th>Screenshots?: </th>
+			<td><%= ENV['SCREENSHOTS']  %></td>  			
+          </tr>
+        </table> 
+      </div>
+     </div>
+  <div class="summary_body">
+      <table class="StatTable">
+        <tr>
+          <th>Summary</th>
+          <th>Executed</th>
+	  <th class="passed"><img src="images/table_passed.png"> Passed</th>
+          <th class="failed"><img src="images/table_failed.png">Failed</th>
+          <th class="skipped"><img src="images/table_skipped.png">Skipped</th>
+          <th class="undefined"><img src="images/table_undefined.png">Undefined</th>
+          <th class="pending"><img src="images/table_pending.png">Pending</th>
+          <th>Average Duration</th>
+        </tr>
+        <tr class="summary_row_header">
+	  <td>Scenarios</td>
+          <td><%= report.scenario_count %></td>
+          <td><%= raw(report.scenarios_summary_for :passed) %></td>
+          <td><%= raw(report.scenarios_summary_for :failed) %></td>
+          <td><%= raw(report.scenarios_summary_for :skipped) %></td>
+          <td><%= raw(report.scenarios_summary_for :undefined) %></td>
+          <td><%= raw(report.scenarios_summary_for :pending) %></td>
+          <td><%= report.scenario_average_duration(report.features) %></td>
+        </tr>
+        <tr class="summary_row_header">
+          <td >Steps</td>
+          <td><%= report.step_count %></td>
+          <td><%= raw(report.steps_summary_for :passed) %></td>
+          <td><%= raw(report.steps_summary_for :failed) %></td>
+          <td><%= raw(report.steps_summary_for :skipped) %></td>
+          <td><%= raw(report.steps_summary_for :undefined) %></td>
+          <td><%= raw(report.steps_summary_for :pending) %></td>
+          <td><%= report.step_average_duration(report.features) %></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="failures">
+      <br />
+      <h2>Tests With Failures:</h2>
+      <br />
+      <table cellspacing="0" cellpadding="7" border="0">
+        <tr style="background-color: #E0E0E0;">
+          <th></th>
+          <th style="text-align: left;">Feature</th>
+          <th style="text-align: left;">Scenario</th>
+          <th style="text-align: left;">File</th>
+        </tr>
+        <% report.features.each do |feature| %>
+          <% feature.scenarios.each do |scenario| %>
+            <% if report.failed_scenario? scenario %>
+        <tr>
+          <td><img src="images/failed.png" width="20"/></td>
+          <td><%= feature.title %> </td>
+          <td><%= scenario.name %></td>
+          <td style="color: gray;"><%= scenario.file_colon_line %></td>
+        </tr>
+            <% end %>
+          <% end %>
+        <% end %>
+      </table>
+
+      <section class="feature-overview">
+        <br />
+        <h2 class="scenarios">Feature Overview:</h2>
+        <br />
+
+        <table cellspacing="0" cellpadding="7" border="0">
+          <tr>
+            <th>Feature</th>
+            <th>File</th>
+            <th>Passed</th>
+            <th>Failed</th>
+            <th>Pending</th>
+            <th>Undefined</th>
+            <th>Skipped</th>
+            <th>Duration</th>
+          </tr>
+          <% report.features.each do |feature| %>
+          <tr>
+            <td class="feature_title">
+              <a href="<%= feature.file %>"><%= feature.title %></a>
+            </td>
+            <td>
+              <%= feature.file %>
+            </td>
+            <td>
+              <%= feature.scenarios_for(:passed).length %>
+            </td>
+            <td>
+              <%= feature.scenarios_for(:failed).length %>
+            </td>
+            <td>
+              <%= feature.scenarios_for(:pending).length %>
+            </td>
+            <td>
+              <%= feature.scenarios_for(:undefined).length %>
+            </td>
+            <td>
+              <%= feature.scenarios_for(:skipped).length %>
+            </td>
+            <td>
+              <%= feature.formatted_duration(feature.duration) %>
+            </td>
+          </tr>
+          <% end %>
+        </table>
+      </section>
+    </div>
+
+    <div class="footer">
+      Generated by Bueller Reports (Pretty Face Fork)
+    </div>
+
+  </body>
+</html>

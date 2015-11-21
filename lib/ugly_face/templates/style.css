@@ -1,0 +1,346 @@
+/* Colors:
+
+  light-gray: #F9F9F9;
+  mid-gray: #F2F2F2;
+  dark-gray: #E0E0E0;
+  extra-dark-gray: #AEAEAE;
+  aqua: #4B7CAB;
+
+ */
+
+body {
+  font-family: Verdana,Helvetica,sans-serif;
+  font-size: 0.80em;
+  color: #1A1A1A; 
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+a, a:visited {
+  color: #0071BC;
+  text-decoration:none;
+}
+
+
+a:hover {
+    text-decoration:underline;
+}
+
+h2 {
+  font-size: 1.3em;
+  margin: 0;
+}
+
+.header_logo {
+    float: left;
+    width: 155px;
+}
+
+.header_description {
+    float: right;
+    padding: 2px;
+}
+
+.run_stats{
+    font-size: 0.9em;
+}
+
+.run_stats td{
+    padding: 0 25px 0 0px;
+}
+
+.run_stats th{
+	text-align: right;
+}
+
+.StatTable{
+width: 100%;
+table-layout: fixed;
+background-color: #fff;
+border-collapse: separate;
+border-spacing: 6px;
+}
+
+.StatTable th {
+vertical-align: middle;
+background-color: #f7f0f0;
+padding: 3px;
+text-align: center;
+}
+
+.StatTable tr {background-color: #f9f9f9;}
+.StatTable th img {
+    vertical-align: middle;
+	padding-right: 10px;
+}
+
+.StatTable td {
+	padding: 6px; 
+	margin:10px
+}
+
+div.feature_background {
+  border-top: 1px solid #d8d7d5;
+  clear:both;
+}
+div.scenario_list {
+	width: 70%;
+	margin:0 auto;
+	float: center;
+	background-color: white;
+	padding: 10px;
+}
+
+.summary_body {
+  clear: both;
+}
+.summary_row_header {
+  text-align: center;
+  font-size: 1em;
+}
+.summary td {
+  font-size: 1em;
+  text-align: center;
+}
+.summary td:first-child {
+  font-size: inherit;
+  text-align: inherit;
+  width: inherit;
+}
+.percentage {
+	color: #808080;
+	font-size: .7em;
+}
+
+td.stepDuration {
+  text-align: right;
+  padding-right: 5%;
+  font-weight: bold;
+}
+
+th.failed {
+  background-color: #FF1D25;
+  color: white;
+}
+
+th.passed {
+  background-color: #90c447;
+  color: white;
+}
+
+th.pending {
+  background-color: #fbb03b;
+  color: white;
+}
+
+th.undefined {
+  background-color: #2e3192;
+  color: white;
+}
+
+th.skipped {
+  background-color: #ed1e79;
+  color: white;
+}
+
+td.skipped_step{
+    background-color: #F9CFE1;
+}
+.footer {
+  width: 100%;
+  background-color: #4B7CAB;
+  float: left;
+  margin-left: -7px;
+  margin-top: 25px;
+  font-family: Verdana;
+  font-size: 1em;
+  color: white;
+  clear: both;
+}
+.failures {
+  width: 100%;
+  float: left;
+}
+.failures h2 {
+  color: #A00000;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.scenarios h2 {
+  color: #4B7CAB;
+  margin-top: 15px;
+  margin-left: 5px;
+}
+.results h2 {
+  color: #282828;
+}
+.summary h2 {
+  color: white;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+.feature_title {
+  background-color: #F0F0F0;
+  font-size: 1em;
+}
+table.scenario {
+  border-width: 2px;
+  border-color: #cccccc;
+  border-style: solid;
+  border-collapse: collapse;
+}
+
+.borderSeparator {
+  border-top: 1px solid #ccc;
+}
+
+td.image_tag {
+  text-align: left;
+  width: 30px;
+}
+.description {
+  width: 100%;
+  font-family: inherit
+}
+
+.img_container img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.failures tr:nth-child(odd) {
+  background-color:#F9F9F9;
+}
+.failures tr:nth-child(even) {
+  background-color:#F2F2F2;
+}
+
+.failures tr td {
+  border-top:1px solid #AEAEAE;
+}
+.failures tr:last-child td:first-child {
+  border-radius: 0px 0px 0px 18px;
+}
+.failures tr:last-child td:last-child {
+  border-radius: 0px 0px 18px 0px;
+}
+
+table.param_table {
+    border-collapse: collapse;
+    text-align: center;
+}
+.param_table th,.param_table td {
+  border: 1px solid #E0E0E0;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: left;
+}
+
+.multiline_arg {
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color:#F2F2F2;
+}
+
+.feature-overview th {
+  background-color: #E0E0E0;
+  text-align: left;
+}
+
+.error {
+  color: black;
+  background-color: #f9e708;
+  border-color: #eed3d7;
+}
+
+.message td {
+  padding: 5px;
+  font-weight: bold;
+}
+
+.detail td {
+  margin-left: 10px;
+  padding: 7px;
+  font-weight: normal;
+ 
+}
+
+.ruby {
+  font-size: 12px;
+  font-family: monospace;
+  color: white;
+  background: black;
+  padding: 0.1em 0 0.2em 0;
+}
+.ruby .keyword {
+  color: #ff6600;
+}
+.ruby .constant {
+  color: #339999;
+}
+.ruby .attribute {
+  color: white;
+}
+.ruby .global {
+  color: white;
+}
+.ruby .module {
+  color: white;
+}
+.ruby .class {
+  color: white;
+}
+.ruby .string {
+  color: #66ff00;
+}
+.ruby .ident {
+  color: white;
+}
+.ruby .method {
+  color: #ffcc00;
+}
+.ruby .number {
+  color: white;
+}
+.ruby .char {
+  color: white;
+}
+.ruby .comment {
+  color: #9933cc;
+}
+.ruby .symbol {
+  color: white;
+}
+.ruby .regex {
+  color: #44b4cc;
+}
+.ruby .punct {
+  color: white;
+}
+.ruby .escape {
+  color: white;
+}
+.ruby .interp {
+  color: white;
+}
+.ruby .expr {
+  color: white;
+}
+.ruby .offending {
+  background: #333333;
+}
+.ruby .linenum {
+  width: 75px;
+  padding: 0.1em 1em 0.2em 0;
+  color: black;
+  background: #fffbd3;
+}

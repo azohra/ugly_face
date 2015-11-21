@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+  <link href='<%= feature.directory_prefix_for(feature.file) %>stylesheets/style.css' type='text/css' rel='stylesheet' />
+  <meta charset="utf-8">
+  <title>Feature Results</title>
+</head>
+
+<body>
+
+<div style="clear: both; width: 100%; background-color: #F6F6F6;">
+  <!--<a href="<%= feature.directory_prefix_for(feature.file) + feature.parent_filename %>" style="color=#0071BC;">&lt; Back</a>-->
+  <a href="<%= feature.directory_prefix_for(feature.file) %>index.html" style="color=#0071BC;">&lt; Back</a>
+</div>
+
+<div style="float:left; clear:both;">
+  <div class="header_logo">
+    <img src="<%= feature.directory_prefix_for(feature.file) %>images/<%= logo %>" width="100px" />
+  </div>
+  <div class="header_description" >
+    <% if customize %>
+        <%= render "feature_header" %>
+    <% else %>
+        <%= render "page_header", :feature => feature %>
+    <% end %>
+
+    <table class="run_stats">
+      <tr>
+        <th>Screenshots?: </th>
+        <td><%= ENV['SCREENSHOTS']  %></td>
+        <th>Started: </th>
+        <td><%= feature.start_time.strftime("%A %B %-d, %Y at %H:%M:%S") %></td>
+      </tr>
+      <tr>
+        <th>Debug?: </th>
+        <td><%= ENV['DEBUG']  %></td>
+        <th>Duration: </th>
+        <td><%= feature.formatted_duration(feature.duration) %></td>
+      </tr>
+    </table>
+    <% if feature.description? %>
+        <pre class="description run_stats">Story<br/><%= feature.description %></pre>
+    <% end %>
+  </div>
+</div>
+
+<div class="summary_body">
+  <table class="StatTable">
+    <tr>
+      <th>Summary</th>
+      <th>Executed</th>
+      <th class="passed"><%= raw(feature.table_image_for('passed', feature.file)) %> Passed</th>
+      <th class="failed"><%= raw(feature.table_image_for('failed', feature.file)) %> Failed</th>
+      <th class="skipped"><%= raw(feature.table_image_for('skipped', feature.file)) %> Skipped</th>
+      <th class="undefined"><%= raw(feature.table_image_for('undefined', feature.file)) %> Undefined</th>
+      <th class="pending" ><%= raw(feature.table_image_for('pending', feature.file)) %> Pending</th>
+      <th>Average Duration</th>
+    </tr>
+
+    <tr class="summary_row_header">
+      <td>Scenarios</td>
+      <td><%= feature.scenarios.length %></td>
+      <td><%= raw(feature.scenario_summary_for :passed) %></td>
+      <td><%= raw(feature.scenario_summary_for :failed) %></td>
+      <td><%= raw(feature.scenario_summary_for :skipped) %></td>
+      <td><%= raw(feature.scenario_summary_for :undefined) %></td>
+      <td><%= raw(feature.scenario_summary_for :pending) %></td>
+      <td><%= feature.scenario_average_duration %></td>
+    </tr>
+    <tr class="summary_row_header">
+      <td>Steps</td>
+      <td><%= feature.steps.length %></td>
+      <td><%= raw(feature.step_summary_for :passed) %></td>
+      <td><%= raw(feature.step_summary_for :failed) %></td>
+      <td><%= raw(feature.step_summary_for :skipped) %></td>
+      <td><%= raw(feature.step_summary_for :undefined) %></td>
+      <td><%= raw(feature.step_summary_for :pending) %></td>
+      <td><%= feature.step_average_duration %></td>
+    </tr>
+
+
+  </table>
+</div>
+
+<div class="feature_background">
+  <div class="scenario_list">
+    <% if feature.has_background? %>
+        <br />
+        <h2 class="scenarios">Background: <%= feature.background_title.name %></h2>
+    <% end %>
+    <table cellspacing="0" cellpadding="4" border="0" width="100%">
+      <% feature.background_steps.each do |step| %>
+          <tr>
+            <td><%= raw(feature.image_tag_for(step.status, feature.file)) %></td>
+            <td>
+              <%= render "step", step: step %>
+            </td>
+          </tr>
+      <% end %>
+    </table>
+    <br />
+    <h2 class="scenarios">Scenarios:</h2>
+    <% feature.scenarios.each do |scenario| %>
+        <table cellspacing="0" cellpadding="4" class="scenario" width="100%">
+          <tr >
+            <th colspan="3" class="<%= scenario.status.to_s %>"><%= scenario.name %> (<%= scenario.duration.round(1) %>s)</th>
+          </tr>
+          <% scenario.steps.each do |step| %>
+              <tr class="borderSeparator">
+                <td class="image_tag"> <%= raw(feature.image_tag_for(step.status, feature.file)) %></td>
+                <td class="<%= "skipped_step" if step.status == :skipped %>">
+                  <%= render "step", step: step %>
+                </td>
+                <td class="stepDuration"><%= step.duration.round(1) %>s</td>
+              </tr>
+          <% end %>
+          <% if scenario.has_image? %>
+              <tr class="borderSeparator">
+                <td class="image_tag"> <%= raw(feature.image_tag_for('screenshot', feature.file)) %></td>
+                <td class= "scenarioImages">
+                  <% scenario.image.length.times do |i| %>
+                      | <a href='' onclick="img=document.getElementById('<%= scenario.image_id[i] %>'); img.style.display = (img.style.display == 'none' ? 'block' : 'none');return false"><%= "#{scenario.image_label[i]}" %></a> |
+                      <img id='<%= scenario.image_id[i] %>' style='display: none' src='<%= feature.directory_prefix_for(feature.file) %>images/<%= scenario.image[i] %>'/>
+                  <% end %>
+                </td>
+                <td></td>
+              </tr>
+          <% end %>
+          <tr class="borderSeparator">
+            <td class="image_tag"> <%= raw(feature.image_tag_for('debug', feature.file)) %></td>
+            <td class= "debugData"> <%= raw(UglyFace.pop_scenario) %></td>
+            <td></td>
+          </tr>
+        </table>
+        <br /><br />
+    <% end %>
+  </div>
+</div>
+<div class="footer">
+  Generated by Bueller Reports (Pretty Face Fork)
+</div>
+</body>
+</html>
