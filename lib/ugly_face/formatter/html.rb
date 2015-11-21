@@ -206,7 +206,7 @@ module UglyFace
         copy_directory 'images', %w(debug screenshot failed passed pending undefined skipped table_failed table_passed table_pending table_undefined table_skipped), "png"
         logo = logo_file
         copy_file logo, "#{File.join(File.dirname(@path), 'images')}" if logo
-        copy_directory 'images', ['custom_logo'], 'png' unless logo
+        copy_directory 'images', ['logo'], 'png' unless logo
       end
 
       def copy_stylesheets
