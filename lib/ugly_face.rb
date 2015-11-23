@@ -29,8 +29,8 @@ module UglyFace
   end
 
   def self.pop_scenario
-    @msg_storage.at(@index)
-    @index+=1
+    @index+=1 #Do this first so last line (returned data) is the array readout.
+    @msg_storage.at(@index-1)
   end
 
   def self.formatted_cli
