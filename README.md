@@ -1,6 +1,6 @@
 # ugly_face
 
-Customized HTML report for cucumber. 
+A customized version of PrettyFace with new features (debug data, screenshot section, ENV var readouts)
  
 
 ## Getting Started

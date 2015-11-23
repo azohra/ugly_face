@@ -9,8 +9,11 @@ module UglyFace
   @html_output=''
 
   def self.add_msg(key='', msg='')
-    @scenario_msgs[:"#{key}"] = msg
+    hash_data=''
+    msg.each { |k, v| hash_data << "#{k}: #{v}+ " } if msg.is_a?(Hash)
+    @scenario_msgs[:"#{key}"] = "#{(hash_data == '') ? msg : hash_data}"
   end
+
 
   def self.process_scenario
     raw_output=''

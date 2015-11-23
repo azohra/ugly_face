@@ -1,4 +1,7 @@
-=== Release 0.2 / 2015-11-20
+=== Release 0.4 / 2015-11-20
+Cleanup hashes before adding them to the debug output
+
+=== Release 0.3 / 2015-11-20
 Return the actual debug data rather than the index
 
 === Release 0.2 / 2015-11-20
