@@ -40,7 +40,7 @@ module UglyFace
         return if path_or_io.nil?
         dir = File.dirname(path_or_io)
         FileUtils.mkdir_p dir unless File.directory? dir
-        @io = ensure_io(path_or_io, 'html')
+        @io = ensure_io(path_or_io)
       end
       
       def embed(src, mime_type, label)
