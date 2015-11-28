@@ -130,13 +130,15 @@ module UglyFace
       end
 
       def scenario_average_duration
-        durations = scenarios.collect { |scenario| scenario.duration }
+        has_duration = scenarios.reject { |scenario| scenario.duration.nil? }
+        durations = has_duration.collect { |scenario| scenario.duration }
         formatted_duration(durations.reduce(:+).to_f / durations.size)
       end
 
       def step_average_duration
         steps = scenarios.collect { |scenario| scenario.steps }
-        durations = steps.flatten.collect { |step| step.duration }
+        has_duration = steps.flatten.reject { |step| step.duration.nil? }
+        durations = has_duration.collect { |step| step.duration }
         formatted_duration(durations.reduce(:+).to_f / durations.size)
       end
 
@@ -174,14 +176,14 @@ module UglyFace
 
       def populate(scenario)
         @duration = Time.now - @start
-        if scenario.instance_of? Cucumber::Ast::Scenario
-          @name = scenario.name
-          @file_colon_line = scenario.file_colon_line
-        elsif scenario.instance_of? Cucumber::Ast::OutlineTable::ExampleRow
-          @name = scenario.scenario_outline.name
-          @file_colon_line = scenario.backtrace_line
-        end
         @status = scenario.status
+        if scenario.instance_of? Cucumber::Formatter::LegacyApi::Ast::Scenario
+          @name = scenario.name
+          @file_colon_line = scenario.line
+        elsif scenario.instance_of? Cucumber::Formatter::LegacyApi::Ast::ExampleTableRow
+          @name = scenario.name
+          @file_colon_line = scenario.line
+        end
       end
 
       def has_image?
@@ -192,19 +194,22 @@ module UglyFace
     class ReportStep
       attr_accessor :name, :keyword, :file_colon_line, :status, :duration, :table, :multiline_arg, :error
 
-      def initialize(step)
-        @name = step.name
-        @file_colon_line = step.file_colon_line
-        unless step.instance_of? Cucumber::Ast::Background
-          if step.respond_to? :actual_keyword
-            @keyword = step.actual_keyword
-          else
+      def initialize(step, ast_step=nil)
+        if ast_step
+          @name = ast_step.name
+          @keyword = ast_step.keyword
+          @status = ast_step.status
+          @error = ast_step.exception
+        else
+          @name = step.name
+          unless step.instance_of? Cucumber::Formatter::LegacyApi::Ast::Background
             @keyword = step.keyword
+            @status = step.status
+            @multiline_arg = step.multiline_arg unless step.multiline_arg.instance_of? Cucumber::Core::Ast::EmptyMultilineArgument
+            @error = step.exception
           end
-          @status = step.status
-          @multiline_arg = step.multiline_arg
-          @error = step.exception
         end
+        @file_colon_line = step.file_colon_line
       end
 
       def failed_with_error?
@@ -249,7 +254,7 @@ module UglyFace
         end
 
         def snippet_for(error_line)
-            file, line = file_name_and_line(error_line)
+          file, line = file_name_and_line(error_line)
           if file
             [lines_around(file, line), line, file]
           else

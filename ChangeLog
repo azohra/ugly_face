@@ -1,3 +1,6 @@
+=== Release 0.6 / 2015-11-20
+Made the library public friendly. Added support for showing ENV vars in main header & adding debug data to scenarios.
+
 === Release 0.5 / 2015-11-20
 Updated Main ENV var panel
 

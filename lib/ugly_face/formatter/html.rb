@@ -2,10 +2,8 @@ require 'action_view'
 require 'fileutils'
 require 'cucumber/formatter/io'
 require 'cucumber/formatter/duration'
-require 'cucumber/formatter/console'
-require 'cucumber/ast/scenario'
-require 'cucumber/ast/table'
-require 'cucumber/ast/outline_table'
+require 'cucumber/core/ast/scenario'
+require 'cucumber/multiline_argument/data_table'
 require File.join(File.dirname(__FILE__), 'view_helper')
 require File.join(File.dirname(__FILE__), 'report')
 
@@ -19,7 +17,6 @@ module UglyFace
     class Html
       include Cucumber::Formatter::Io
       include Cucumber::Formatter::Duration
-      include Cucumber::Formatter::Console
       include ViewHelper
 
       attr_reader :report, :logo
@@ -90,18 +87,19 @@ module UglyFace
       end
 
       def before_feature_element(feature_element)
-        unless scenario_outline? feature_element
+      #  unless scenario_outline? feature_element
           @report.add_scenario  ReportScenario.new(feature_element)
-        end
+      #  end
       end
 
       def after_feature_element(feature_element)
-        unless scenario_outline?(feature_element)
+      #  unless scenario_outline?(feature_element)
           process_scenario(feature_element)
-        end
+      #  end
       end
 
       def before_table_row(example_row)
+        @before_example_row = example_row
         @report.add_scenario ReportScenario.new(example_row) unless info_row?(example_row)
       end
 
@@ -110,7 +108,7 @@ module UglyFace
           @report.current_scenario.populate(example_row)
           build_scenario_outline_steps(example_row)
         end
-        populate_cells(example_row) if example_row.instance_of? Cucumber::Ast::Table::Cells
+        populate_cells(example_row) if example_row.instance_of? Cucumber::Core::Ast::DataTable
       end
 
       def before_step(step)
@@ -237,7 +235,7 @@ module UglyFace
         report_step = ReportStep.new(step)
         report_step.duration = duration
         report_step.status = status unless status.nil?
-        if step.background?
+        if step.background
           @report.current_feature.background << report_step if @report.processing_background_steps?
         else
           @report.add_step report_step
@@ -246,12 +244,12 @@ module UglyFace
       end
 
       def scenario_outline?(feature_element)
-        feature_element.is_a? Cucumber::Ast::ScenarioOutline
+        feature_element.is_a? Cucumber::Core::Ast::ScenarioOutline
       end
 
       def info_row?(example_row)
         return example_row.scenario_outline.nil? if example_row.respond_to? :scenario_outline
-        return true if example_row.instance_of? Cucumber::Ast::Table::Cells
+        return true if example_row.instance_of? Cucumber::Formatter::LegacyApi::Ast::DataTableRow
         false
       end
 
@@ -261,12 +259,15 @@ module UglyFace
       end
 
       def build_scenario_outline_steps(example_row)
-        si = example_row.instance_variable_get :@step_invocations
+        si = example_row.cells
         si.each do |row|
-          process_step(row, row.status)
+          duration =  Time.now - @step_timer
+          report_step = ReportStep.new(@before_example_row, example_row)
+          report_step.duration = duration
+          @report.add_step report_step
+#          process_step(row, row.status)
         end
       end
-
       def step_error(exception)
         return nil if exception.nil?
         exception.backtrace[-1] =~ /^#{step.file_colon_line}/ ? exception : nil
