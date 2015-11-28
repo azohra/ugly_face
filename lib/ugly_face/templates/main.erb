@@ -7,45 +7,37 @@
   </head>
 
   <body>
-    <div style="float: left; clear:both;">
-      <div class="header_logo">
-        <img src='images/<%= logo %>' width="155px" />
-      </div>
-      <div class="header_description">
-        <% if report.custom_suite_header? %>
+  <div style="float: left; clear:both;">
+    <div class="header_logo">
+      <img src='images/<%= logo %>' width="155px" />
+    </div>
+    <div class="header_description">
+      <% if report.custom_suite_header? %>
           <%= render "suite_header" %>
-        <% else %>
+      <% else %>
           <%= render "main_header" %>
-        <% end %>
-		<br>
-        <table class="run_stats">
-		  <tr>
-		    <th>Environment: </th>
-			<td><%= ENV['TARGET']  %></td>
-            <th>Started: </th>
-			<td><%= report.start_time  %></td>  
-          </tr>
-		  <tr>
-            <th>Location: </th>
-			<td><%= ENV['NODE']  %></td>  
-			<th>Duration: </th>        
-            <td><%= report.total_duration  %></td>			
-          </tr>
-		  <tr>
-            <th>Browser: </th>
-			<td><%= ENV['CLIENT']  %></td> 
- 			<th>Debug?: </th>
-			<td><%= ENV['DEBUG']  %></td>
-          </tr>
-		  <tr>
-		    <th>Scope: </th>
-			<td><%= ENV['SCOPE']  %></td>
-            <th>Screenshots?: </th>
-			<td><%= ENV['SCREENSHOTS']  %></td>  			
-          </tr>
-        </table> 
-      </div>
-     </div>
+      <% end %>
+      <br>
+      <table class="run_stats">
+        <tr>
+          <th>Started: </th>
+          <td><%= report.start_time  %></td>
+          <% UglyFace::get_header(1).each do |k,v| %>
+              <th><%="#{k.capitalize}: "%></th>
+              <td><%=(v.nil?) ? 'False' : v.capitalize%></td>
+          <% end %>
+        </tr>
+        <tr>
+          <th>Duration: </th>
+          <td><%= report.total_duration  %></td>
+          <% UglyFace::get_header(2).each do |k,v| %>
+              <th><%="#{k.capitalize}: "%></th>
+              <td><%=(v.nil?) ? 'False' : v.capitalize%></td>
+          <% end %>
+        </tr>
+      </table>
+    </div>
+  </div>
   <div class="summary_body">
       <table class="StatTable">
         <tr>

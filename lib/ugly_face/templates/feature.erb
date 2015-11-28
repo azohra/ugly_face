@@ -26,14 +26,10 @@
 
     <table class="run_stats">
       <tr>
-        <th>Screenshots?: </th>
-        <td><%= ENV['SCREENSHOTS']  %></td>
         <th>Started: </th>
         <td><%= feature.start_time.strftime("%A %B %-d, %Y at %H:%M:%S") %></td>
       </tr>
       <tr>
-        <th>Debug?: </th>
-        <td><%= ENV['DEBUG']  %></td>
         <th>Duration: </th>
         <td><%= feature.formatted_duration(feature.duration) %></td>
       </tr>
@@ -128,7 +124,7 @@
           <% end %>
           <tr class="borderSeparator">
             <td class="image_tag"> <%= raw(feature.image_tag_for('debug', feature.file)) %></td>
-            <td class= "debugData"> <%= raw(UglyFace.pop_scenario) %></td>
+            <td class= "debugData"> <%= raw(UglyFace::fetch_scenario_msg) %></td>
             <td></td>
           </tr>
         </table>
