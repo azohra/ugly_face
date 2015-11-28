@@ -1,4 +1,7 @@
-=== Release 0.6 / 2015-11-20
+=== Release 0.7 / 2015-11-28
+Added Cucumber 2.0 support
+
+=== Release 0.6 / 2015-11-28
 Made the library public friendly. Added support for showing ENV vars in main header & adding debug data to scenarios.
 
 === Release 0.5 / 2015-11-20
